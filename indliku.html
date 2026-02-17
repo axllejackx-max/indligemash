@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>for you, indlikuuu ♡</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink-deep: #c2185b;
+    --pink-mid: #e91e8c;
+    --pink-soft: #f48fb1;
+    --pink-pale: #fce4ec;
+    --pink-blush: #fdf0f5;
+    --pink-rose: #ff80ab;
+    --pink-dark: #880e4f;
+    --pink-cream: #fff5f9;
+    --text-dark: #3d0020;
+    --text-mid: #7b1048;
+    --text-light: #ad1457;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--pink-blush);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: var(--pink-mid);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, background 0.3s ease;
+    mix-blend-mode: multiply;
+  }
+
+  .cursor-trail {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--pink-soft);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.18s ease;
+    opacity: 0.6;
+  }
+
+  /* ===================== MUSIC PLAYER ===================== */
+  .music-player {
+    position: fixed;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(233,30,140,0.18);
+    border-radius: 60px;
+    padding: 12px 28px 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 8px 32px rgba(194,24,91,0.12), 0 2px 8px rgba(194,24,91,0.07);
+    animation: floatDown 0.9s cubic-bezier(.23,1,.32,1) both;
+    min-width: 260px;
+  }
+
+  @keyframes floatDown {
+    from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .music-vinyl {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #c2185b 0deg, #e91e8c 60deg, #f48fb1 120deg, #c2185b 180deg, #880e4f 240deg, #e91e8c 300deg, #c2185b 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(194,24,91,0.25);
+  }
+
+  .music-vinyl.spinning {
+    animation: spin 3s linear infinite;
+  }
+
+  .music-vinyl::after {
+    content: '';
+    width: 13px;
+    height: 13px;
+    background: #fff5f9;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: inset 0 0 3px rgba(194,24,91,0.3);
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .music-info {
+    flex: 1;
+  }
+
+  .music-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--pink-dark);
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+  }
+
+  .music-sub {
+    font-size: 10px;
+    color: var(--text-light);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 2px;
+    opacity: 0.8;
+  }
+
+  .music-btn {
+    background: var(--pink-mid);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 10px rgba(233,30,140,0.3);
+    flex-shrink: 0;
+  }
+
+  .music-btn:hover {
+    transform: scale(1.1);
+    background: var(--pink-deep);
+  }
+
+  .music-btn-icon {
+    font-family: 'Cormorant Garamond', serif;
+    color: white;
+    font-size: 13px;
+    line-height: 1;
+    margin-left: 2px;
+  }
+
+  .music-waves {
+    display: flex;
+    align-items: center;
+    gap: 2.5px;
+    height: 20px;
+  }
+
+  .wave-bar {
+    width: 3px;
+    background: var(--pink-soft);
+    border-radius: 2px;
+    animation: none;
+    height: 5px;
+    transition: height 0.3s ease;
+  }
+
+  .music-waves.playing .wave-bar:nth-child(1) { animation: wave 0.8s ease-in-out infinite; }
+  .music-waves.playing .wave-bar:nth-child(2) { animation: wave 0.8s ease-in-out infinite 0.15s; }
+  .music-waves.playing .wave-bar:nth-child(3) { animation: wave 0.8s ease-in-out infinite 0.3s; }
+  .music-waves.playing .wave-bar:nth-child(4) { animation: wave 0.8s ease-in-out infinite 0.45s; }
+  .music-waves.playing .wave-bar:nth-child(5) { animation: wave 0.8s ease-in-out infinite 0.1s; }
+
+  @keyframes wave {
+    0%, 100% { height: 5px; }
+    50% { height: 18px; background: var(--pink-mid); }
+  }
+
+  /* ===================== HERO ===================== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 100px 20px 60px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 20%, rgba(244,143,177,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(233,30,140,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 50% at 50% 50%, rgba(255,128,171,0.12) 0%, transparent 70%),
+      linear-gradient(160deg, #fff0f7 0%, #fce4ec 40%, #fdf0f5 100%);
+  }
+
+  .hero-ornament {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.13;
+    animation: drift 12s ease-in-out infinite;
+  }
+
+  .hero-ornament:nth-child(1) { width: 500px; height: 500px; background: radial-gradient(circle, #e91e8c, transparent); top: -100px; right: -100px; animation-delay: 0s; }
+  .hero-ornament:nth-child(2) { width: 350px; height: 350px; background: radial-gradient(circle, #c2185b, transparent); bottom: -50px; left: -50px; animation-delay: -4s; }
+  .hero-ornament:nth-child(3) { width: 200px; height: 200px; background: radial-gradient(circle, #f48fb1, transparent); top: 30%; left: 10%; animation-delay: -8s; }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(20px, -20px) scale(1.05); }
+    66% { transform: translate(-15px, 15px) scale(0.97); }
+  }
+
+  .floating-petals {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .petal {
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--pink-soft);
+    opacity: 0;
+    animation: petalFall linear infinite;
+    user-select: none;
+  }
+
+  @keyframes petalFall {
+    0%   { opacity: 0; transform: translateY(-20px) rotate(0deg); }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.4; }
+    100% { opacity: 0; transform: translateY(100vh) rotate(360deg); }
+  }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+    font-weight: 500;
+    margin-bottom: 24px;
+    position: relative;
+    animation: fadeUp 0.9s cubic-bezier(.23,1,.32,1) 0.2s both;
+  }
+
+  .hero-label::before,
+  .hero-label::after {
+    content: '— ';
+    opacity: 0.5;
+  }
+  .hero-label::after { content: ' —'; }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 9vw, 110px);
+    font-weight: 700;
+    line-height: 0.92;
+    text-align: center;
+    position: relative;
+    animation: fadeUp 0.9s cubic-bezier(.23,1,.32,1) 0.35s both;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-title .line1 {
+    display: block;
+    background: linear-gradient(135deg, var(--pink-dark) 0%, var(--pink-mid) 50%, var(--pink-deep) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title .line2 {
+    display: block;
+    font-style: italic;
+    background: linear-gradient(135deg, var(--pink-mid) 0%, var(--pink-rose) 60%, var(--pink-soft) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 0.75em;
+  }
+
+  .hero-divider {
+    margin: 36px auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 0.9s cubic-bezier(.23,1,.32,1) 0.5s both;
+  }
+
+  .divider-line {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--pink-soft), transparent);
+  }
+
+  .divider-gem {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--pink-mid);
+    animation: pulse-gem 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-gem {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.25); opacity: 0.7; }
+  }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(17px, 2.5vw, 22px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-mid);
+    text-align: center;
+    max-width: 440px;
+    line-height: 1.7;
+    animation: fadeUp 0.9s cubic-bezier(.23,1,.32,1) 0.65s both;
+    letter-spacing: 0.01em;
+  }
+
+  .scroll-indicator {
+    margin-top: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUp 1s ease 1.1s both;
+    cursor: pointer;
+  }
+
+  .scroll-text {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pink-soft);
+  }
+
+  .scroll-arrow {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--pink-soft), transparent);
+    position: relative;
+    animation: scrollBounce 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(10px); opacity: 0.5; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===================== SECTION HEADER ===================== */
+  .section-intro {
+    text-align: center;
+    padding: 90px 20px 10px;
+    position: relative;
+  }
+
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 5vw, 52px);
+    color: var(--pink-dark);
+    font-style: italic;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  /* ===================== PHOTO CARDS ===================== */
+  .cards-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow:
+      0 20px 60px rgba(194,24,91,0.10),
+      0 4px 16px rgba(194,24,91,0.06),
+      0 0 0 1px rgba(244,143,177,0.18);
+    background: white;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s cubic-bezier(.23,1,.32,1), transform 0.9s cubic-bezier(.23,1,.32,1), box-shadow 0.4s ease;
+    position: relative;
+  }
+
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card:hover {
+    box-shadow:
+      0 32px 80px rgba(194,24,91,0.16),
+      0 8px 24px rgba(194,24,91,0.10),
+      0 0 0 1px rgba(244,143,177,0.3);
+    transform: translateY(-4px);
+  }
+
+  .card.visible:hover {
+    transform: translateY(-6px);
+  }
+
+  .card:nth-child(even) {
+    direction: rtl;
+  }
+  .card:nth-child(even) > * {
+    direction: ltr;
+  }
+
+  /* Photo side */
+  .card-photo {
+    position: relative;
+    overflow: hidden;
+    min-height: 460px;
+    background: var(--pink-pale);
+  }
+
+  .card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(.23,1,.32,1), filter 0.5s ease;
+    filter: saturate(0.95) brightness(0.98);
+  }
+
+  .card:hover .card-photo img {
+    transform: scale(1.06);
+    filter: saturate(1.05) brightness(1.01);
+  }
+
+  .card-photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(194,24,91,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .card-num {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 700;
+    font-style: italic;
+    color: rgba(255,255,255,0.22);
+    line-height: 1;
+    pointer-events: none;
+    text-shadow: 0 2px 10px rgba(194,24,91,0.25);
+    transition: color 0.4s ease, transform 0.4s ease;
+  }
+
+  .card:hover .card-num {
+    color: rgba(255,255,255,0.35);
+    transform: scale(1.05);
+  }
+
+  .card-tag {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(244,143,177,0.4);
+    border-radius: 40px;
+    padding: 6px 14px;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+    font-weight: 500;
+  }
+
+  /* Text side */
+  .card-text {
+    padding: 52px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    background: #fff;
+  }
+
+  .card-text::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, transparent, var(--pink-soft), transparent);
+    left: 0;
+    border-radius: 2px;
+  }
+
+  .card:nth-child(even) .card-text::before {
+    left: auto;
+    right: 0;
+  }
+
+  .card-quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    line-height: 0.6;
+    color: var(--pink-pale);
+    margin-bottom: 20px;
+    display: block;
+    font-style: italic;
+    transition: color 0.4s ease;
+  }
+
+  .card:hover .card-quote-mark {
+    color: rgba(244,143,177,0.35);
+  }
+
+  .card-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.85;
+    color: var(--text-dark);
+    letter-spacing: 0.01em;
+  }
+
+  .card-body strong, .card-highlight {
+    color: var(--pink-mid);
+    font-weight: 600;
+  }
+
+  .card-footer {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card-footer-line {
+    height: 1px;
+    width: 40px;
+    background: linear-gradient(90deg, var(--pink-soft), transparent);
+  }
+
+  .card-footer-text {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pink-soft);
+  }
+
+  /* ===================== FLOATING HEARTS ===================== */
+  .floating-hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .fheart {
+    position: absolute;
+    bottom: -20px;
+    font-family: 'Cormorant Garamond', serif;
+    opacity: 0;
+    animation: riseHeart linear infinite;
+    font-size: 14px;
+    color: var(--pink-soft);
+  }
+
+  @keyframes riseHeart {
+    0%   { transform: translateY(0) rotate(-10deg) scale(0.5); opacity: 0; }
+    15%  { opacity: 0.7; }
+    85%  { opacity: 0.3; }
+    100% { transform: translateY(-110vh) rotate(20deg) scale(1); opacity: 0; }
+  }
+
+  /* ===================== FINAL SECTION ===================== */
+  .final-section {
+    padding: 80px 24px 120px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(233,30,140,0.04) 50%, rgba(194,24,91,0.08) 100%);
+    pointer-events: none;
+  }
+
+  .final-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .final-ornament {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    color: var(--pink-pale);
+    line-height: 1;
+    margin-bottom: 0;
+    display: block;
+    font-style: italic;
+    animation: pulse-final 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-final {
+    0%, 100% { transform: scale(1); color: var(--pink-pale); }
+    50% { transform: scale(1.06); color: rgba(244,143,177,0.4); }
+  }
+
+  .final-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 68px);
+    font-style: italic;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--pink-dark), var(--pink-mid), var(--pink-rose));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 28px;
+  }
+
+  .final-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 1.8;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+
+  .final-stamp {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border: 1.5px solid rgba(244,143,177,0.5);
+    border-radius: 16px;
+    padding: 20px 40px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    animation: stampIn 0.8s cubic-bezier(.23,1,.32,1) 0.3s both;
+  }
+
+  @keyframes stampIn {
+    from { transform: scale(0.8) rotate(-3deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .stamp-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-style: italic;
+    color: var(--pink-mid);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .stamp-sub {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--pink-soft);
+  }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 720px) {
+    .card {
+      grid-template-columns: 1fr;
+    }
+    .card:nth-child(even) {
+      direction: ltr;
+    }
+    .card-photo {
+      min-height: 300px;
+    }
+    .card-text {
+      padding: 36px 28px;
+    }
+    .music-player {
+      min-width: unset;
+      max-width: calc(100% - 40px);
+      padding: 10px 20px 10px 14px;
+    }
+  }
+
+  /* ===================== SHIMMER LOADING ===================== */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .card-photo:not(.loaded) img {
+    background: linear-gradient(90deg, var(--pink-pale) 25%, var(--pink-blush) 50%, var(--pink-pale) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* ===================== RIBBON DECO ===================== */
+  .ribbon-deco {
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ribbon-deco svg {
+    display: block;
+    width: 100%;
+    height: 50px;
+  }
+
+  /* ===================== PROGRESS BAR ===================== */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--pink-mid), var(--pink-rose), var(--pink-soft));
+    z-index: 2000;
+    width: 0%;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 8px rgba(233,30,140,0.4);
+  }
+
+  /* ===================== SPARK EFFECT ===================== */
+  .spark {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9990;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--pink-mid);
+    opacity: 1;
+    animation: sparkFly 0.6s ease-out forwards;
+    user-select: none;
+  }
+
+  @keyframes sparkFly {
+    0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+
+  /* ===================== PHOTO NUMBER BADGE ===================== */
+  .photo-badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--pink-mid);
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(194,24,91,0.2);
+  }
+
+  /* ===================== CARD GLOW EFFECT ===================== */
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 29px;
+    padding: 1px;
+    background: linear-gradient(135deg, transparent, rgba(244,143,177,0.3), transparent, rgba(233,30,140,0.2), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .card:hover::after {
+    opacity: 1;
+  }
+
+  /* ===================== TYPEWRITER TITLE ===================== */
+  .typewriter-wrap {
+    overflow: hidden;
+  }
+
+  /* Section ornamental line */
+  .ornament-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px auto 0;
+    max-width: 280px;
+  }
+
+  .ornament-dash {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, transparent, var(--pink-soft), transparent);
+  }
+
+  .ornament-char {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--pink-soft);
+  }
+
+  /* Animated background particles for hero */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particleDrift ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes particleDrift {
+    0%   { transform: translate(0, 0); opacity: 0; }
+    20%  { opacity: 0.6; }
+    80%  { opacity: 0.3; }
+    100% { transform: translate(var(--pdx), var(--pdy)); opacity: 0; }
+  }
+
+  /* Smooth hover underline for text */
+  .indliku-name {
+    font-style: italic;
+    color: var(--pink-mid);
+    position: relative;
+    display: inline-block;
+    font-weight: 600;
+  }
+
+  .indliku-name::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--pink-mid);
+    transform: scaleX(0.4);
+    transform-origin: left;
+    opacity: 0.5;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  .indliku-name:hover::after {
+    transform: scaleX(1);
+    opacity: 0.9;
+  }
+
+  /* ====== Delicate star sparkles background ====== */
+  .star-field {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--pink-soft);
+    animation: twinkle ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  /* ====== Timeline connector between cards ====== */
+  .cards-container {
+    position: relative;
+  }
+
+  .cards-container::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 60px;
+    bottom: 60px;
+    width: 1px;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(244,143,177,0.3) 5%,
+      rgba(233,30,140,0.2) 50%,
+      rgba(244,143,177,0.3) 95%,
+      transparent 100%
+    );
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ====== Card hover ripple ====== */
+  .card-ripple {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(244,143,177,0.5);
+    pointer-events: none;
+    animation: rippleOut 0.9s ease-out forwards;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  @keyframes rippleOut {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+  }
+
+  /* ====== Section separator ====== */
+  .section-sep {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 20px 0 0;
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+  .sep-line {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, transparent, rgba(244,143,177,0.5), transparent);
+  }
+
+  .sep-diamond {
+    width: 7px;
+    height: 7px;
+    background: var(--pink-soft);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    animation: diamondPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes diamondPulse {
+    0%, 100% { transform: rotate(45deg) scale(1); opacity: 0.7; }
+    50%       { transform: rotate(45deg) scale(1.4); opacity: 1; }
+  }
+
+  /* ====== Animated border card ====== */
+  @keyframes borderFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* ====== Card visible state extra polish ====== */
+  .card.visible .card-body {
+    animation: textReveal 0.7s ease 0.3s both;
+  }
+
+  @keyframes textReveal {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card.visible .card-footer {
+    animation: textReveal 0.7s ease 0.5s both;
+  }
+
+  .card.visible .card-quote-mark {
+    animation: quoteReveal 0.6s ease 0.1s both;
+  }
+
+  @keyframes quoteReveal {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ====== Animated gradient border on focus card ====== */
+  .card.in-focus {
+    outline: none;
+    box-shadow:
+      0 32px 80px rgba(194,24,91,0.18),
+      0 0 0 2px rgba(233,30,140,0.25),
+      0 8px 24px rgba(194,24,91,0.10);
+  }
+
+  /* ====== Photo shimmer on load ====== */
+  @keyframes imgReveal {
+    from { opacity: 0; filter: blur(8px) saturate(0); }
+    to   { opacity: 1; filter: blur(0) saturate(0.95); }
+  }
+
+  .card-photo img {
+    animation: imgReveal 0.8s ease both;
+  }
+
+  /* ====== Decorative corner flourishes on card-text ====== */
+  .card-text::after {
+    content: '';
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    width: 48px;
+    height: 48px;
+    border-right: 1.5px solid rgba(244,143,177,0.25);
+    border-bottom: 1.5px solid rgba(244,143,177,0.25);
+    border-radius: 0 0 8px 0;
+    pointer-events: none;
+    transition: border-color 0.4s ease, width 0.4s ease, height 0.4s ease;
+  }
+
+  .card:hover .card-text::after {
+    width: 60px;
+    height: 60px;
+    border-color: rgba(233,30,140,0.35);
+  }
+
+  .card-text-corner-tl {
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    width: 32px;
+    height: 32px;
+    border-left: 1.5px solid rgba(244,143,177,0.2);
+    border-top: 1.5px solid rgba(244,143,177,0.2);
+    border-radius: 4px 0 0 0;
+    pointer-events: none;
+    transition: border-color 0.4s ease;
+  }
+
+  .card:nth-child(even) .card-text-corner-tl {
+    left: auto;
+    right: 28px;
+    border-left: none;
+    border-right: 1.5px solid rgba(244,143,177,0.2);
+  }
+
+  .card:hover .card-text-corner-tl {
+    border-color: rgba(233,30,140,0.3);
+  }
+
+  /* ====== Glowing line below hero label ====== */
+  .hero-label-glow {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* ====== Animated loading dots ====== */
+  @keyframes dotBounce {
+    0%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-6px); }
+  }
+
+  /* ====== Image number indicator ====== */
+  .card-num-large {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    font-style: italic;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.65);
+    text-transform: uppercase;
+  }
+
+  /* ====== Music bar equalizer extra bars ====== */
+  .wave-bar {
+    transition: height 0.2s ease, background 0.2s ease;
+  }
+
+  /* ====== Final section extra deco ====== */
+  .final-deco-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--pink-soft), transparent);
+    margin: 0 auto 24px;
+    animation: lineGrow 2s ease-in-out infinite;
+  }
+
+  @keyframes lineGrow {
+    0%, 100% { height: 40px; opacity: 0.4; }
+    50% { height: 70px; opacity: 0.8; }
+  }
+
+  /* ====== Hover glow text ====== */
+  .card-body:hover .indliku-name {
+    text-shadow: 0 0 16px rgba(233,30,140,0.3);
+  }
+
+  /* ====== Background mesh gradient animation ====== */
+  @keyframes meshFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .hero-bg {
+    background-size: 200% 200%;
+    animation: meshFlow 12s ease infinite;
+  }
+
+  /* ====== Scroll-triggered line decorations ====== */
+  .reveal-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--pink-soft), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s cubic-bezier(.23,1,.32,1);
+    margin: 10px 0;
+  }
+
+  .reveal-line.visible {
+    transform: scaleX(1);
+  }
+
+  /* ====== Photo overlay gradient for elegance ====== */
+  .card-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top right,
+      rgba(136, 14, 79, 0.12) 0%,
+      transparent 50%,
+      rgba(255, 128, 171, 0.06) 100%
+    );
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    transition: opacity 0.4s ease;
+    opacity: 0.7;
+  }
+
+  .card:hover .card-photo::after {
+    opacity: 0;
+  }
+
+  /* ====== Animated underline for section title ====== */
+  .section-title {
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--pink-mid), transparent);
+    transition: transform 1s cubic-bezier(.23,1,.32,1);
+    border-radius: 1px;
+  }
+
+  .section-title.revealed::after {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  /* ====== Final heart animation ====== */
+  .final-hearts {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .final-heart-item {
+    position: absolute;
+    bottom: 0;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--pink-soft);
+    opacity: 0;
+    animation: finalRise linear infinite;
+  }
+
+  @keyframes finalRise {
+    0%   { transform: translateY(0) rotate(-5deg); opacity: 0; }
+    15%  { opacity: 0.5; }
+    85%  { opacity: 0.3; }
+    100% { transform: translateY(-200px) rotate(10deg); opacity: 0; }
+  }
+
+  /* ====== Tooltip on indliku-name ====== */
+  .indliku-name {
+    cursor: default;
+  }
+
+  /* ====== Letter spacing animate ====== */
+  @keyframes letterSpread {
+    from { letter-spacing: -0.1em; opacity: 0; }
+    to   { letter-spacing: 0.02em; opacity: 1; }
+  }
+
+  .hero-sub {
+    animation: fadeUp 0.9s cubic-bezier(.23,1,.32,1) 0.65s both, letterSpread 1s ease 0.65s both;
+  }
+
+  /* ====== Noise texture overlay ====== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 500;
+    opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* ====== Card border gradient animated ====== */
+  .card-border-anim {
+    position: absolute;
+    inset: -1px;
+    border-radius: 29px;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .card:hover .card-border-anim {
+    opacity: 1;
+  }
+
+  /* ====== Song credit at bottom ====== */
+  .song-credit {
+    text-align: center;
+    padding: 20px 0 40px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--pink-soft);
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+  }
+
+  /* ====== Animated dots decoration ====== */
+  .dot-pattern {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+    opacity: 0.12;
+  }
+
+  .dot-pattern-tl {
+    top: 40px;
+    left: 40px;
+  }
+
+  .dot-pattern-br {
+    bottom: 40px;
+    right: 40px;
+    transform: rotate(180deg);
+  }
+
+  /* ====== Micro-interaction on card tag ====== */
+  .card-tag {
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+
+  .card:hover .card-tag {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.96);
+  }
+
+  /* ====== Photo badge bounce on visible ====== */
+  .card.visible .photo-badge {
+    animation: badgePop 0.5s cubic-bezier(.23,1,.32,1) 0.4s both;
+  }
+
+  @keyframes badgePop {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  /* ====== Long text elegant first letter ====== */
+  .card-body::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 2em;
+    font-style: italic;
+    color: var(--pink-mid);
+    float: left;
+    line-height: 0.85;
+    margin-right: 5px;
+    margin-top: 4px;
+  }
+
+  /* ====== Line clamp removed, full text shown ====== */
+
+  /* ====== Footer hover ====== */
+  .card-footer:hover .card-footer-line {
+    width: 70px;
+  }
+
+  .card-footer-line {
+    transition: width 0.4s ease;
+  }
+
+  /* ====== Hero title shimmer ====== */
+  @keyframes shimmerText {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .hero-title .line1 {
+    background-size: 200% auto;
+    animation: shimmerText 4s linear infinite;
+  }
+
+  /* ====== Elegant page-level background motion ====== */
+  @keyframes bgShift {
+    0%   { background-position: 0% 0%; }
+    50%  { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  body {
+    background: linear-gradient(160deg, #fff5f9 0%, #fce4ec 35%, #fdf0f5 65%, #fff0f7 100%);
+    background-size: 300% 300%;
+    animation: bgShift 20s ease infinite;
+  }
+
+  /* ====== Gradient overlay on card text hover ====== */
+  .card-text {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-text-glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(233,30,140,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease;
+  }
+
+  .card:hover .card-text-glow {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* ====== Number animation ====== */
+  .card.visible .card-num {
+    animation: numReveal 0.8s cubic-bezier(.23,1,.32,1) 0.2s both;
+  }
+
+  @keyframes numReveal {
+    from { opacity: 0; transform: translateX(-15px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ====== Ribbon wave at top of final section ====== */
+  .wave-ribbon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  /* ====== Glass card effect enhancement ====== */
+  .card-text {
+    background: linear-gradient(160deg, #ffffff 0%, #fff8fb 100%);
+  }
+
+  /* ====== Selection color ====== */
+  ::selection {
+    background: rgba(233,30,140,0.15);
+    color: var(--pink-dark);
+  }
+
+  /* ====== Scrollbar ====== */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--pink-cream);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--pink-soft);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--pink-mid);
+  }
+
+  /* ====== Mobile refinements ====== */
+  @media (max-width: 480px) {
+    .hero-title {
+      font-size: 42px;
+    }
+    .hero-sub {
+      font-size: 16px;
+    }
+    .card-body {
+      font-size: 16px;
+    }
+    .card-text {
+      padding: 28px 22px;
+    }
+    .final-title {
+      font-size: 36px;
+    }
+    .music-player {
+      padding: 8px 14px 8px 10px;
+      gap: 10px;
+    }
+    .music-title {
+      font-size: 12px;
+    }
+    .music-sub {
+      font-size: 9px;
+    }
+  }
+
+  /* ====== Fade in sections ====== */
+  .section-intro {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .section-intro.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .final-inner {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease 0.2s, transform 1s ease 0.2s;
+  }
+
+  .final-section.visible .final-inner {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ====== Interactive hover scale on photo badge ====== */
+  .photo-badge {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover .photo-badge {
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(194,24,91,0.3);
+  }
+  /* ====== Touch device adjustments ====== */
+  @media (hover: none) {
+    .cursor, .cursor-trail { display: none; }
+    body { cursor: auto; }
+    .card:hover {
+      transform: translateY(-3px);
+    }
+    .card.visible:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  /* ====== Print styles ====== */
+  @media print {
+    .music-player, .progress-bar, .floating-hearts,
+    .star-field, .cursor, .cursor-trail { display: none; }
+    .card { break-inside: avoid; box-shadow: none; }
+  }
+
+  /* ====== Large screen enhancements ====== */
+  @media (min-width: 1200px) {
+    .cards-container {
+      gap: 100px;
+    }
+    .card-text {
+      padding: 64px 56px;
+    }
+    .card-body {
+      font-size: 19px;
+    }
+  }
+
+  /* ====== Card 6 special treatment (fotbar) ====== */
+  #card6 {
+    background: linear-gradient(135deg, #fff 0%, #fff5f9 100%);
+  }
+
+  #card6 .card-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(233,30,140,0.08) 0%,
+      transparent 50%
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  #card6 .card-tag {
+    background: rgba(233,30,140,0.12);
+    border-color: rgba(233,30,140,0.3);
+    color: var(--pink-deep);
+    font-weight: 600;
+  }
+
+  /* ====== First card special (hero card) ====== */
+  #card1 {
+    margin-top: 10px;
+  }
+
+  #card1 .card-num {
+    font-size: 80px;
+  }
+
+  /* ====== Animated color on card-footer-text ====== */
+  .card-footer-text {
+    animation: colorCycle 6s ease-in-out infinite;
+  }
+
+  @keyframes colorCycle {
+    0%, 100% { color: var(--pink-soft); }
+    50% { color: var(--pink-mid); }
+  }
+
+  /* ====== Quote mark float animation ====== */
+  .card-quote-mark {
+    animation: quoteDrift 5s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes quoteDrift {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  /* ====== Vinyl center hole animate ====== */
+  .music-vinyl::after {
+    animation: holeBreath 3s ease-in-out infinite;
+  }
+
+  @keyframes holeBreath {
+    0%, 100% { width: 13px; height: 13px; }
+    50% { width: 10px; height: 10px; }
+  }
+
+  /* ====== Scroll indicator enhanced ====== */
+  .scroll-indicator {
+    position: relative;
+    z-index: 10;
+  }
+
+  .scroll-indicator:hover .scroll-text {
+    color: var(--pink-mid);
+    letter-spacing: 0.4em;
+    transition: all 0.3s ease;
+  }
+
+  .scroll-indicator:hover .scroll-arrow {
+    height: 70px;
+    transition: height 0.3s ease;
+  }
+
+  /* ====== Hero ornament enhanced sizes ====== */
+  @media (min-width: 900px) {
+    .hero-ornament:nth-child(1) { width: 600px; height: 600px; }
+    .hero-ornament:nth-child(2) { width: 450px; height: 450px; }
+  }
+
+  /* ====== Subtle card shimmer on load ====== */
+  @keyframes cardFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(60px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .card.visible {
+    animation: cardFadeIn 0.9s cubic-bezier(.23,1,.32,1) both;
+  }
+
+  /* ====== Additional animation: hero label pulse ====== */
+  .hero-label {
+    animation: fadeUp 0.9s cubic-bezier(.23,1,.32,1) 0.2s both, labelPulse 4s ease-in-out 1.5s infinite;
+  }
+
+  @keyframes labelPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.65; }
+  }
+
+  /* ====== Pink glow on scroll progress bar tip ====== */
+  #progressBar::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--pink-rose);
+    box-shadow: 0 0 8px 3px rgba(255,128,171,0.6);
+  }
+
+  /* ====== Song credit style ====== */
+  .song-credit {
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+
+  /* ====== Enhanced hero sub text ====== */
+  .hero-sub em {
+    color: var(--pink-mid);
+    font-style: normal;
+  }
+
+  /* ====== Custom animation for music waves when not playing ====== */
+  .music-waves:not(.playing) .wave-bar {
+    height: 5px;
+    opacity: 0.4;
+    transition: height 0.4s ease, opacity 0.4s ease;
+  }
+
+  /* ====== Bottom safe area padding ====== */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .final-section {
+      padding-bottom: calc(120px + env(safe-area-inset-bottom));
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Floating hearts background -->
+<div class="floating-hearts" id="floatingHearts"></div>
+
+<!-- Star field -->
+<div class="star-field" id="starField"></div>
+
+<!-- Music Player -->
+<div class="music-player" id="musicPlayer">
+  <div class="music-vinyl" id="musicVinyl"></div>
+  <div class="music-info">
+    <div class="music-title">Mine All Mine</div>
+    <div class="music-sub">our song</div>
+  </div>
+  <div class="music-waves" id="musicWaves">
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+  </div>
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+    <span class="music-btn-icon" id="musicIcon">&#9654;</span>
+  </button>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="mine all mine.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ornament"></div>
+  <div class="hero-ornament"></div>
+  <div class="hero-ornament"></div>
+  <div class="floating-petals" id="heroPatals"></div>
+
+  <span class="hero-label">a little something</span>
+
+  <h1 class="hero-title">
+    <span class="line1">untuk kamu,</span>
+    <span class="line2">indlikuuu</span>
+  </h1>
+
+  <div class="hero-divider">
+    <div class="divider-line"></div>
+    <span class="divider-gem">&#10042;</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <p class="hero-sub">
+    ada hal-hal yang lebih mudah diungkap<br>
+    lewat foto dan kata-kata yang diam-diam<br>
+    selalu ada buat kamu
+  </p>
+
+  <div class="scroll-indicator" onclick="document.querySelector('.section-intro').scrollIntoView({behavior:'smooth'})">
+    <span class="scroll-text">scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ===================== SECTION INTRO ===================== -->
+<div class="section-intro">
+  <span class="section-eyebrow">moments & words</span>
+  <h2 class="section-title">setiap foto,<br>setiap rasa</h2>
+  <div class="ornament-row">
+    <div class="ornament-dash"></div>
+    <span class="ornament-char">&#10055;</span>
+    <div class="ornament-dash"></div>
+    <span class="ornament-char">&#10055;</span>
+    <div class="ornament-dash"></div>
+  </div>
+</div>
+
+<!-- ===================== CARDS ===================== -->
+<div class="cards-container">
+
+  <!-- Card 1 -->
+  <div class="card" id="card1">
+    <div class="card-photo">
+      <img src="indliku1.jpeg" alt="indliku foto 1" loading="lazy">
+      <div class="card-photo-overlay"></div>
+      <span class="card-num">01</span>
+      <div class="photo-badge">1</div>
+      <div class="card-tag">foto pertama</div>
+    </div>
+    <div class="card-text">
+      <div class="card-text-glow"></div>
+      <div class="card-text-corner-tl"></div>
+      <span class="card-quote-mark">&ldquo;</span>
+      <p class="card-body">
+        kadang aku mikir, lucu juga ya gimana bisa dari sekian banyak orang di dunia, aku malah jatuhnya ke kamu. bukan yang paling heboh, bukan juga yang paling banyak gaya, tapi kamu punya cara sendiri buat bikin aku betah. apalagi kalo lagi liat foto kamu yang gemes gini, rasanya pengen aku simpen rapet rapet biar ga ada yang rebut. <span class="indliku-name">indlikuuu</span> emang selalu punya tempat yang beda di kepala aku.
+      </p>
+      <div class="card-footer">
+        <div class="card-footer-line"></div>
+        <span class="card-footer-text">for you always</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card" id="card2">
+    <div class="card-photo">
+      <img src="indliku2.jpeg" alt="indliku foto 2" loading="lazy">
+      <div class="card-photo-overlay"></div>
+      <span class="card-num">02</span>
+      <div class="photo-badge">2</div>
+      <div class="card-tag">senyum itu</div>
+    </div>
+    <div class="card-text">
+      <div class="card-text-glow"></div>
+      <div class="card-text-corner-tl"></div>
+      <span class="card-quote-mark">&ldquo;</span>
+      <p class="card-body">
+        aku suka banget liat kamu ketawa di foto ini. bukan cuma karena kamu keliatan gemes, tapi karena tiap liat senyum kamu rasanya ikut ringan aja hati aku. kaya capek seharian bisa ilang dikit cuma gara gara liat kamu. <span class="indliku-name">indlikuuu</span> mungkin ga sadar, tapi hal kecil dari kamu aja udah cukup buat bikin hari aku jauh lebih enak dijalanin.
+      </p>
+      <div class="card-footer">
+        <div class="card-footer-line"></div>
+        <span class="card-footer-text">my favorite sight</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card" id="card3">
+    <div class="card-photo">
+      <img src="indliku3.jpeg" alt="indliku foto 3" loading="lazy">
+      <div class="card-photo-overlay"></div>
+      <span class="card-num">03</span>
+      <div class="photo-badge">3</div>
+      <div class="card-tag">sederhana & cantik</div>
+    </div>
+    <div class="card-text">
+      <div class="card-text-glow"></div>
+      <div class="card-text-corner-tl"></div>
+      <span class="card-quote-mark">&ldquo;</span>
+      <p class="card-body">
+        di foto ini kamu keliatan sederhana, tapi justru itu yang aku suka. ga perlu aneh aneh, kamu udah cantik dengan cara kamu sendiri. aku bersyukur banget bisa deket sama kamu, bisa kenal kamu lebih dari orang lain. <span class="indliku-name">indlikuuu</span> selalu berhasil bikin aku ngerasa "oh ternyata ini orang yang selama ini aku cari."
+      </p>
+      <div class="card-footer">
+        <div class="card-footer-line"></div>
+        <span class="card-footer-text">bersyukur banget</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="card" id="card4">
+    <div class="card-photo">
+      <img src="indliku4.jpeg" alt="indliku foto 4" loading="lazy">
+      <div class="card-photo-overlay"></div>
+      <span class="card-num">04</span>
+      <div class="photo-badge">4</div>
+      <div class="card-tag">betapa beruntungnya</div>
+    </div>
+    <div class="card-text">
+      <div class="card-text-glow"></div>
+      <div class="card-text-corner-tl"></div>
+      <span class="card-quote-mark">&ldquo;</span>
+      <p class="card-body">
+        kadang aku suka bengong sendiri kalo lagi liatin foto kamu, bukan karena apa apa, cuma lagi mikir aja kok bisa ya aku seberuntung ini. kamu yang perhatian, kamu yang sabar, kamu yang selalu ada walau aku kadang nyebelin. <span class="indliku-name">indlikuuu</span> mungkin ga sempurna, tapi buat aku kamu udah lebih dari cukup.
+      </p>
+      <div class="card-footer">
+        <div class="card-footer-line"></div>
+        <span class="card-footer-text">more than enough</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="card" id="card5">
+    <div class="card-photo">
+      <img src="indliku5.jpeg" alt="indliku foto 5" loading="lazy">
+      <div class="card-photo-overlay"></div>
+      <span class="card-num">05</span>
+      <div class="photo-badge">5</div>
+      <div class="card-tag">rasa hangat itu</div>
+    </div>
+    <div class="card-text">
+      <div class="card-text-glow"></div>
+      <div class="card-text-corner-tl"></div>
+      <span class="card-quote-mark">&ldquo;</span>
+      <p class="card-body">
+        foto gemes kamu yang ini jujur bikin aku senyum sendiri. kaya ada rasa hangat aja tiap liatnya. aku jadi makin yakin kalo kamu bukan cuma sekadar lewat di hidup aku, tapi emang buat nemenin perjalanan aku. <span class="indliku-name">indlikuuu</span>, makasih ya udah mau ada sejauh ini, udah mau tetep di samping aku sampe sekarang.
+      </p>
+      <div class="card-footer">
+        <div class="card-footer-line"></div>
+        <span class="card-footer-text">terima kasih</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 6 -->
+  <div class="card" id="card6">
+    <div class="card-photo">
+      <img src="kita1.jpeg" alt="kita berdua foto 6" loading="lazy">
+      <div class="card-photo-overlay"></div>
+      <span class="card-num">06</span>
+      <div class="photo-badge">6</div>
+      <div class="card-tag">kita &#10084;</div>
+    </div>
+    <div class="card-text">
+      <div class="card-text-glow"></div>
+      <div class="card-text-corner-tl"></div>
+      <span class="card-quote-mark">&ldquo;</span>
+      <p class="card-body">
+        kalo yang ini beda lagi rasanya. bukan cuma kamu, tapi ada kita. tiap liat fotbar ini aku keinget momen kita bareng, ketawa bareng, diem bareng, bahkan hal kecil yang mungkin orang lain anggap biasa. tapi buat aku itu berharga. karena di foto ini ada cerita kita yang jalan bareng. dan aku harap, kedepannya bukan cuma foto ini aja yang jadi kenangan, tapi bakal banyak lagi fotbar lain yang nemenin perjalanan aku sama <span class="indliku-name">indlikuuu</span>.
+      </p>
+      <div class="card-footer">
+        <div class="card-footer-line"></div>
+        <span class="card-footer-text">our story goes on</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== FINAL ===================== -->
+<section class="final-section" id="finalSection">
+  <div class="final-bg"></div>
+  <div class="final-hearts" id="finalHearts"></div>
+  <div class="final-inner">
+    <div class="final-deco-line"></div>
+    <span class="final-ornament">&ldquo;</span>
+    <h2 class="final-title">indlikuuu</h2>
+    <p class="final-text">
+      ini bukan cuma kumpulan foto.<br>
+      ini bukti kecil bahwa kamu<br>
+      selalu ada di sini, di dalam aku.
+    </p>
+    <div class="final-stamp">
+      <span class="stamp-name">indlikuuu</span>
+      <span class="stamp-sub">selalu &amp; selamanya</span>
+    </div>
+  </div>
+</section>
+
+<div class="song-credit">mine all mine &mdash; playing for you</div>
+
+<!-- ===================== DECORATIVE SVG OVERLAYS ===================== -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="pinkGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <linearGradient id="pinkGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c2185b;stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:#e91e8c;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#f48fb1;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="pinkGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#880e4f;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#ff80ab;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<script>
+// ===== CURSOR =====
+const cursor = document.getElementById('cursor');
+const trail  = document.getElementById('cursorTrail');
+let mx = 0, my = 0, tx = 0, ty = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+(function animCursor() {
+  tx += (mx - tx) * 0.14;
+  ty += (my - ty) * 0.14;
+  trail.style.left = tx + 'px';
+  trail.style.top  = ty + 'px';
+  requestAnimationFrame(animCursor);
+})();
+
+// ===== PROGRESS BAR =====
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.body.scrollHeight - window.innerHeight;
+  progressBar.style.width = (scrolled / total * 100) + '%';
+});
+
+// ===== MUSIC =====
+const audio = document.getElementById('bgMusic');
+const musicIcon = document.getElementById('musicIcon');
+const vinyl = document.getElementById('musicVinyl');
+const waves = document.getElementById('musicWaves');
+let playing = false;
+
+function toggleMusic() {
+  if (playing) {
+    audio.pause();
+    vinyl.classList.remove('spinning');
+    waves.classList.remove('playing');
+    musicIcon.innerHTML = '&#9654;';
+    playing = false;
+  } else {
+    audio.play().catch(() => {});
+    vinyl.classList.add('spinning');
+    waves.classList.add('playing');
+    musicIcon.innerHTML = '&#9646;&#9646;';
+    playing = true;
+  }
+}
+
+// Auto-play on first interaction
+let autoPlayTriggered = false;
+document.addEventListener('click', () => {
+  if (!autoPlayTriggered) {
+    autoPlayTriggered = true;
+    if (!playing) toggleMusic();
+  }
+}, { once: true });
+
+// ===== SCROLL REVEAL =====
+const cards = document.querySelectorAll('.card');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+cards.forEach(card => observer.observe(card));
+
+// ===== FLOATING HEARTS =====
+const heartsContainer = document.getElementById('floatingHearts');
+const heartChars = ['&#10084;', '&#9825;', '&#9829;', '&#10033;', '&#10022;'];
+
+function spawnHeart() {
+  const h = document.createElement('span');
+  h.className = 'fheart';
+  h.innerHTML = heartChars[Math.floor(Math.random() * heartChars.length)];
+  h.style.left = Math.random() * 100 + 'vw';
+  h.style.fontSize = (10 + Math.random() * 16) + 'px';
+  const dur = 8 + Math.random() * 10;
+  h.style.animationDuration = dur + 's';
+  h.style.animationDelay = (Math.random() * 5) + 's';
+  h.style.opacity = 0;
+  heartsContainer.appendChild(h);
+  setTimeout(() => h.remove(), (dur + 6) * 1000);
+}
+
+setInterval(spawnHeart, 1400);
+for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 500);
+
+// ===== FLOATING PETALS in HERO =====
+const petalsWrap = document.getElementById('heroPatals');
+const petalSymbols = ['\u2022', '\u25E6', '\u2023', '\u2027'];
+
+function spawnPetal() {
+  const p = document.createElement('span');
+  p.className = 'petal';
+  p.textContent = petalSymbols[Math.floor(Math.random() * petalSymbols.length)];
+  p.style.left = Math.random() * 100 + '%';
+  p.style.fontSize = (6 + Math.random() * 10) + 'px';
+  const dur = 6 + Math.random() * 8;
+  p.style.animationDuration = dur + 's';
+  p.style.animationDelay = (Math.random() * 4) + 's';
+  petalsWrap.appendChild(p);
+  setTimeout(() => p.remove(), (dur + 5) * 1000);
+}
+
+setInterval(spawnPetal, 700);
+for (let i = 0; i < 10; i++) setTimeout(spawnPetal, i * 200);
+
+// ===== STAR FIELD =====
+const starField = document.getElementById('starField');
+for (let i = 0; i < 55; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = 1 + Math.random() * 3;
+  s.style.cssText = `
+    width: ${size}px;
+    height: ${size}px;
+    left: ${Math.random() * 100}%;
+    top: ${Math.random() * 100}%;
+    animation-duration: ${2 + Math.random() * 4}s;
+    animation-delay: ${Math.random() * 4}s;
+  `;
+  starField.appendChild(s);
+}
+
+// ===== SPARK ON CLICK =====
+document.addEventListener('click', e => {
+  for (let i = 0; i < 5; i++) {
+    const sp = document.createElement('span');
+    sp.className = 'spark';
+    sp.innerHTML = heartChars[Math.floor(Math.random() * heartChars.length)];
+    const angle = (Math.random() * 360) * (Math.PI / 180);
+    const dist  = 40 + Math.random() * 50;
+    sp.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+    sp.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+    sp.style.left = e.clientX + 'px';
+    sp.style.top  = e.clientY + 'px';
+    sp.style.animationDelay = (i * 0.06) + 's';
+    document.body.appendChild(sp);
+    setTimeout(() => sp.remove(), 800);
+  }
+});
+
+// ===== CURSOR GROW ON CARD HOVER =====
+cards.forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    cursor.style.background = 'rgba(233,30,140,0.5)';
+  });
+  card.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursor.style.background = 'var(--pink-mid)';
+  });
+});
+
+// ===== PARALLAX on HERO =====
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const heroTitle = document.querySelector('.hero-title');
+  if (heroTitle && scrollY < window.innerHeight) {
+    heroTitle.style.transform = `translateY(${scrollY * 0.22}px)`;
+    heroTitle.style.opacity = 1 - scrollY / (window.innerHeight * 0.75);
+  }
+  const heroSub = document.querySelector('.hero-sub');
+  if (heroSub && scrollY < window.innerHeight) {
+    heroSub.style.transform = `translateY(${scrollY * 0.14}px)`;
+    heroSub.style.opacity = 1 - scrollY / (window.innerHeight * 0.6);
+  }
+});
+
+// ===== FINAL SECTION REVEAL =====
+const finalSection = document.getElementById('finalSection');
+const finalObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.2 });
+if (finalSection) finalObserver.observe(finalSection);
+
+// ===== SECTION INTRO REVEAL =====
+const sectionIntro = document.querySelector('.section-intro');
+const introObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      const t = entry.target.querySelector('.section-title');
+      if (t) setTimeout(() => t.classList.add('revealed'), 500);
+    }
+  });
+}, { threshold: 0.3 });
+if (sectionIntro) introObserver.observe(sectionIntro);
+
+// ===== FINAL HEARTS =====
+const finalHeartsEl = document.getElementById('finalHearts');
+if (finalHeartsEl && finalSection) {
+  const spawnFinalHeart = () => {
+    const fh = document.createElement('span');
+    fh.className = 'final-heart-item';
+    fh.innerHTML = heartChars[Math.floor(Math.random() * heartChars.length)];
+    fh.style.left = (15 + Math.random() * 70) + '%';
+    fh.style.fontSize = (12 + Math.random() * 18) + 'px';
+    const dur = 3 + Math.random() * 4;
+    fh.style.animationDuration = dur + 's';
+    fh.style.animationDelay = (Math.random() * 2) + 's';
+    finalHeartsEl.appendChild(fh);
+    setTimeout(() => fh.remove(), (dur + 3) * 1000);
+  };
+  const finalSectionObs2 = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        for (let i = 0; i < 8; i++) setTimeout(spawnFinalHeart, i * 280);
+        setInterval(spawnFinalHeart, 1100);
+      }
+    });
+  }, { threshold: 0.3 });
+  finalSectionObs2.observe(finalSection);
+}
+
+// ===== CARD RIPPLE ON CLICK =====
+cards.forEach(card => {
+  card.addEventListener('click', e => {
+    const rect = card.getBoundingClientRect();
+    const ripple = document.createElement('div');
+    ripple.className = 'card-ripple';
+    ripple.style.width  = '60px';
+    ripple.style.height = '60px';
+    ripple.style.left   = (e.clientX - rect.left) + 'px';
+    ripple.style.top    = (e.clientY - rect.top) + 'px';
+    card.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 1000);
+  });
+});
+
+// ===== MUSIC PLAYER GLOW SYNC =====
+const syncMusicGlow = () => {
+  if (playing) {
+    const pulse = Math.sin(Date.now() * 0.003) * 0.5 + 0.5;
+    vinyl.style.boxShadow = `0 2px ${12 + pulse * 16}px rgba(194,24,91,${0.2 + pulse * 0.25})`;
+  } else {
+    vinyl.style.boxShadow = '0 2px 12px rgba(194,24,91,0.25)';
+  }
+  requestAnimationFrame(syncMusicGlow);
+};
+syncMusicGlow();
+
+// ===== CURSOR INTERACTION =====
+document.querySelectorAll('.music-btn, .scroll-indicator').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1.8)';
+    cursor.style.background = 'rgba(233,30,140,0.6)';
+    trail.style.borderColor = 'rgba(233,30,140,0.5)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursor.style.background = 'var(--pink-mid)';
+    trail.style.borderColor = 'var(--pink-soft)';
+  });
+});
+
+// ===== IMAGE LOADED ANIMATION =====
+document.querySelectorAll('.card-photo img').forEach(img => {
+  img.addEventListener('load', () => {
+    img.style.animation = 'imgReveal 0.8s ease both';
+    img.parentElement.classList.add('loaded');
+  });
+  if (img.complete) img.parentElement.classList.add('loaded');
+});
+
+// ===== HERO PARTICLES =====
+const heroEl = document.querySelector('.hero');
+for (let i = 0; i < 18; i++) {
+  const p2 = document.createElement('div');
+  p2.className = 'particle';
+  const size = 2 + Math.random() * 5;
+  const dx = (Math.random() - 0.5) * 200;
+  const dy = (Math.random() - 0.5) * 200;
+  p2.style.cssText = `
+    width:${size}px;height:${size}px;
+    left:${Math.random()*100}%;top:${Math.random()*100}%;
+    background:${Math.random()>0.5?'var(--pink-soft)':'var(--pink-mid)'};
+    --pdx:${dx}px;--pdy:${dy}px;
+    animation-duration:${6+Math.random()*8}s;
+    animation-delay:${Math.random()*6}s;
+  `;
+  heroEl.appendChild(p2);
+}
+
+// ===== KEYBOARD SHORTCUT =====
+document.addEventListener('keydown', e => {
+  if (e.key === 'm' || e.key === 'M') toggleMusic();
+});
+
+console.log(
+  '%c indlikuuu %c made with love',
+  'background:#e91e8c;color:white;padding:4px 12px;border-radius:20px;font-family:Georgia;font-style:italic;font-size:14px;',
+  'color:#e91e8c;font-style:italic;font-size:12px;'
+);
+
+const textObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animation = 'none';
+      entry.target.offsetHeight; // reflow
+      entry.target.style.animation = '';
+    }
+  });
+}, { threshold: 0.5 });
+
+cardBodies.forEach(cb => textObserver.observe(cb));
+
+// ===== PHOTO TILT ON MOUSEMOVE =====
+cards.forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width  - 0.5;
+    const y = (e.clientY - rect.top)  / rect.height - 0.5;
+    card.style.transform = `translateY(-6px) perspective(1200px) rotateY(${x * 5}deg) rotateX(${-y * 3}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+
+// ===== MAGNETIC MUSIC PLAYER =====
+const player = document.getElementById('musicPlayer');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  if (scrollY > 60) {
+    player.style.top = '18px';
+  } else {
+    player.style.top = '28px';
+  }
+});
+
+// ===== FINAL STAMP REVEAL =====
+const stamp = document.querySelector('.final-stamp');
+const stampObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      stamp.style.animation = 'none';
+      stamp.offsetHeight;
+      stamp.style.animation = 'stampIn 0.8s cubic-bezier(.23,1,.32,1) 0.2s both';
+    }
+  });
+}, { threshold: 0.5 });
+if (stamp) stampObserver.observe(stamp);
+
+// ===== CARD APPEAR STAGGER =====
+cards.forEach((card, i) => {
+  card.style.transitionDelay = (i % 2 === 0 ? 0.05 : 0.15) + 's';
+});
+
+// ===== SCROLL TO FIRST CARD =====
+document.querySelector('.scroll-indicator').addEventListener('click', () => {
+  document.querySelector('#card1').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+</script>
+</body>
+</html>
